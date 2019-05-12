@@ -2,6 +2,12 @@
 
 - name: SSH keys
   authorized_key:
-    key: "{{ openshift_ssh_public_key }}"
+    key: "{{ hostvars['OPENSHIFT_ANSIBLE_HOST']['public_key'] }}"
     user: root
     key_options: 'from="{{ openshift_ssh_from }}"'
+  when: hostvars['OPENSHIFT_ANSIBLE_HOST']['public_key'] is defined
+
+- name: SSH key warning
+  debug:
+    msg: SSH key not added to node because the Ansible host wasn't included in the run
+  when: hostvars['OPENSHIFT_ANSIBLE_HOST']['public_key'] is not defined
