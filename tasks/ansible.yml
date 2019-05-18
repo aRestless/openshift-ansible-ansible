@@ -22,7 +22,10 @@
     src: /root/.ssh/id_rsa.pub
   register: ansible_public_key_slurp
 
-- name: Save SSH public key to dummy host
-  add_host:
-    name: OPENSHIFT_ANSIBLE_HOST
+- name: Save SSH public key to fact
+  set_fact:
     public_key: "{{ ansible_public_key_slurp.content | b64decode }}"
+
+- name: Create group of Ansible hosts
+  group_by:
+    key: openshift_ansible_hosts
