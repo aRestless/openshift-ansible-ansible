@@ -5,5 +5,5 @@
     key: "{{ hostvars[item]['public_key'] }}"
     user: root
     key_options: from="{{ hostvars[item]['ansible_default_ipv4']['address'] }}"
-  with_items: "{{ groups['openshift_ansible_hosts'] }}"
+  loop: "{{ groups['openshift_ansible_hosts'] }}"
   when: "'openshift_ansible_hosts' in groups and item != inventory_hostname"
